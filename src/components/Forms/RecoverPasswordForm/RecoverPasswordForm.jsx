@@ -37,8 +37,13 @@ function RecoverPasswordForm({ apiUrl, setPopupData, setIsRecoverPassword, setEr
         body: JSON.stringify({ email: sanitizedEmail, recaptchaToken: captchaValue }), // Envia o token do reCAPTCHA
       });
 
-      if (!response.ok) {
-        setPopupMessage(httpStatusMessagesLogin[response.status] || "Erro ao recuperar senha.");
+      if (!response.ok ) {
+        if (!response.status === 403 || !response.status === 401) {
+          setPopupMessage(httpStatusMessagesLogin[response.status] || "Erro ao recuperar senha.");
+        }
+        else{
+          setPopupMessage("Email inválido");
+        }
         setShowPopup(true);
         return;
       }
