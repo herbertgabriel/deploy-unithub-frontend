@@ -82,7 +82,6 @@ function GerenciamentoUsuarios() {
         throw new Error("Erro ao alterar a role do usuário.");
       }
 
-      alert("Role alterada com sucesso!");
       setShowRolePopup(false);
       fetchUsersByRole(selectedRole);
     } catch (error) {
@@ -120,7 +119,6 @@ function GerenciamentoUsuarios() {
         throw new Error("Erro ao deletar o usuário.");
       }
 
-      alert("Usuário deletado com sucesso!");
       setShowDeletePopup(false);
       setUsers((prevUsers) =>
         prevUsers.filter((user) => user.UserId !== currentUser.UserId)
