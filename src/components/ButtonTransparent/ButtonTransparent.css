@@ -1,0 +1,18 @@
+.button-transparent-template {
+    border: none;
+    color: black;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 12px 18px;
+    border-radius: 50px;
+    background-color: transparent;
+    border: solid 2px #0C4DA2;
+    opacity: 100%;
+  }
+  
+  .button-transparent-template:hover {
+    background-color: #0C4DA2;
+    color: white;
+    transition: 0.5s;
+  }

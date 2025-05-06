@@ -1,0 +1,124 @@
+
+  .perfil-container {
+    background: #ffffff;
+    padding: 32px;
+    border-radius: 12px;
+    max-width: 500px;
+    margin: 40px auto;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  }
+  
+  .perfil-field {
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  .perfil-field p {
+    margin: 0;
+    font-size: 15px;
+    color: #333;
+    text-align: left;
+    margin-bottom: 8px;
+  }
+  
+  /* card que envolve o valor */
+  .perfil-field p:nth-of-type(2) {
+    background-color: #f4f4f4;
+    padding: 10px 14px;
+    border-radius: 30px;
+    border: 1px solid #ddd;
+    margin-top: 4px;
+  }
+  .perfil-field:first-of-type {
+    display: none;
+  }
+  
+  
+  /* Inputs estilizados */
+  .perfil-field input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 6px;
+    border: 1px solid #cccccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    color: #333;
+    font-size: 15px;
+    outline: none;
+  }
+  
+  .perfil-field input:focus {
+    border-color: #007bff;
+    background-color: #ffffff;
+  }
+  
+  /* Mensagens */
+  .success-message {
+    color: #28a745;
+    font-weight: bold;
+    margin-bottom: 16px;
+  }
+  
+  .error-message {
+    color: #dc3545;
+    font-weight: bold;
+    margin-bottom: 16px;
+  }
+  
+  .perfil-field button {
+    margin-top: 8px;
+  }
+
+/* Container para o título e o ícone */
+.title-container {
+  text-align: center;
+  margin-bottom: 20px; 
+}
+.title-container :first-child {
+  text-align: left;
+}
+
+.title-container h1 {
+  font-size: 24px; 
+  margin: 0; 
+  color: #333; 
+}
+
+.title-container .perfil-icon {
+  font-size: 7rem;
+  color: #333333;
+  margin-top: 10px;
+}
+
+#id-field {
+  display: none;
+}
+
+.perfil-field button + button {
+  margin-left: 12px; 
+}
+
+.perfil-field button {
+  margin-top: 8px;
+  padding: 10px 20px; /* espaço interno  */
+}
+
+/* Estilo dos inputs de senha */
+.perfil-field input[type="password"] {
+  background-color: #f4f4f4;
+  padding: 10px 14px;
+  border-radius: 30px;
+  border: 1px solid #ddd;
+  margin-top: 6px;
+  margin-bottom: 12px;
+  width: 95%;
+  font-size: 18px;
+  color: #333;
+  outline: none;
+}
+
+/* focar */
+.perfil-field input[type="password"]:focus {
+  border-color: #007bff;
+  background-color: #fff;
+}

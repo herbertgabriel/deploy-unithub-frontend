@@ -1,0 +1,30 @@
+footer {
+    display: flex;
+    justify-content: space-between;
+    padding: 1.5rem;
+    box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.2);
+    color: black;
+  }
+  
+  footer ul {
+    display: flex;
+    gap: 1.5rem;
+    list-style: none;
+    font-size: 1.3rem;
+    margin: 0;
+    padding: 0;
+  }
+  
+  footer li {
+    cursor: pointer;
+  }
+  
+  footer li:hover {
+    color: gray;
+  }
+  .icons {
+    display: flex;
+    align-items: center;
+    gap: 1.5em;
+    font-size: 1.5em;
+  }

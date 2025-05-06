@@ -1,0 +1,70 @@
+.popup-subscribers-list {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .popup-subscribers-list .popup-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    width: 80%;
+    max-width: 600px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    position: relative;
+  }
+  
+  .popup-subscribers-list .close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: black;
+  }
+  
+  .popup-subscribers-list h2 {
+    margin-top: 0;
+    text-align: center;
+  }
+  
+  .popup-subscribers-list .error-message {
+    color: red;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+  
+  .popup-subscribers-list .subscribers-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  .popup-subscribers-list .subscribers-table th,
+  .subscribers-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  .popup-subscribers-list .subscribers-table th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+  }
+  
+  .popup-subscribers-list .subscribers-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  .popup-subscribers-list .subscribers-table tr:hover {
+    background-color: #f1f1f1;
+  }

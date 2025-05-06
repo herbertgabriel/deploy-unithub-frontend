@@ -1,0 +1,91 @@
+.login-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #0052b4;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+    padding: 3rem 1rem;
+    max-width: 700px; /* Limita a largura máxima do contêiner */
+    margin: 0 auto; /* Centraliza o contêiner na página */
+    border-radius: 10px; /* Adiciona bordas arredondadas */
+    margin-top: 3rem;
+    margin-bottom: 3rem; /* Adiciona espaçamento acima e abaixo do contêiner */
+}
+
+.login-container h1 {
+    color: white;
+    text-align: center; /* Centraliza o título */
+    margin-bottom: 20px; /* Adiciona espaçamento abaixo do título */
+}
+
+.toggle-form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 20px; /* Adiciona espaçamento acima */
+}
+
+.login-container label {
+    font-size: 16px; /* Padroniza o tamanho da fonte */
+    color: #fff;
+    margin-bottom: 5px;
+    font-weight: bold;
+    display: block; /* Garante que o label fique acima do input */
+    width: 100%; /* Garante que o label ocupe toda a largura do contêiner */
+    text-align: left; /* Alinha o texto à esquerda */
+}
+
+.login-container input[type="email"],
+.login-container input[type="password"],
+.login-container input[type="text"],
+.login-container select {
+    width: 500px;
+    padding: 10px 15px;
+    border-radius: 20px;
+    border: none;
+    margin-bottom: 10px;
+    font-size: 14px;
+    color: #000;
+    margin-top: 0.25rem;
+    box-sizing: border-box; /* Garante que padding e border não ultrapassem o tamanho do input */
+}
+
+.login-container form button {
+    background-color: white;
+    width: 100%; /* Garante que o botão ocupe toda a largura do contêiner */
+    color: black;
+    border: none;
+    padding: 12px 20px; /* Padroniza o tamanho do botão */
+    border-radius: 15px;
+    font-size: 16px; /* Padroniza o tamanho da fonte */
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+    text-decoration: none;
+    box-sizing: border-box; /* Garante que padding e border não ultrapassem o tamanho do botão */
+}
+
+.login-container button:hover {
+    background-color: #ddd;
+}
+
+/* Botões de alternar (Cadastro / Esqueci senha) */
+.toggle-form-button {
+    background-color: white;
+    width: 100%; /* Garante que o botão ocupe toda a largura do contêiner */
+    color: black;
+    border: none;
+    padding: 12px 20px; /* Padroniza o tamanho do botão */
+    border-radius: 15px;
+    font-size: 16px; /* Padroniza o tamanho da fonte */
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+    text-decoration: none;
+    box-sizing: border-box; 
+}
+.recaptcha {
+  margin: 1rem 0;
+}

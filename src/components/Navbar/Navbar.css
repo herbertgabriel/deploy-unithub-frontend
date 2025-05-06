@@ -1,0 +1,69 @@
+/* Botão do menu hambúrguer */
+.hamburger-menu {
+    font-size: 24px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    z-index: 1000;
+  }
+  
+  /* Ocultar o botão do menu hambúrguer quando a sidebar estiver aberta */
+  .hamburger-menu.hidden {
+    display: none;
+  }
+  
+  /* Navbar lateral */
+  .sidebar {
+    position: fixed;
+    top: 0;
+    right: -400px; /* Começa fora da tela */
+    width: 300px;
+    height: 100%;
+    background-color: #032147;
+    color: white;
+    transition: right 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); /* Animação suave */
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+  }
+  
+  /* Quando o menu está aberto */
+  .sidebar.open {
+    right: 0; /* Move para dentro da tela */
+  }
+  
+  /* Botão de fechar */
+  .close-btn {
+    align-self: flex-end;
+    font-size: 20px;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    margin-bottom: 20px;
+  }
+  
+
+  .sidebar nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem; 
+  }
+  
+  .sidebar nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 1.2rem;
+    transition: color 0.2s ease;
+    display: flex; 
+    align-items: center; 
+    gap: 10px;
+  }
+  
+  .sidebar nav ul li a:hover {
+    color: #ffcc00;
+  }

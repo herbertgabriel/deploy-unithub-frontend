@@ -1,0 +1,44 @@
+.create-course-form {
+    max-width: 400px;
+    margin: 20px auto;
+    padding: 20px;
+    border-radius: 8px;
+  }
+
+  .create-course-form .button-template{
+    width: 100%;
+  }
+
+  .create-course-form .button-template:hover{
+    color: black
+  }
+  
+  .create-course-form h2 {
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    text-align: center;
+  }
+  
+  .create-course-form .form-group {
+    margin-bottom: 15px;
+  }
+  
+  .create-course-form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+  
+  .create-course-form input,
+  .create-course-form select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+  }
+
+  .create-course-form input{
+    width: 96%;
+  }
+  

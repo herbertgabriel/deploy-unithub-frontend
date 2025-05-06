@@ -1,0 +1,86 @@
+.container-publication {
+    max-width: 800px;
+    padding: 1rem;
+    max-height: 1500px;
+    margin: 2rem auto;
+    overflow: hidden; /* Esconde o conteúdo que ultrapassa a altura */
+    border-radius: 2rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+}
+
+.publicacao-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    width: 100%;
+}
+
+.container-titulo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.container-titulo div {
+    display: flex;
+    flex-direction: column;
+}
+
+.container-botoes{
+    display: flex;
+    gap: 1rem;
+    margin-left: auto; /* Adiciona margem à esquerda para empurrar os botões para a direita */
+}
+
+.container-titulo h1 {
+    margin: 0;
+    font-size: 1.2rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 150px; /* Ajuste conforme necessário */
+}
+
+.container-titulo p {
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+.container-imagens {
+    display: grid;
+    gap: 1rem;
+    margin: 1rem auto 0 auto; /* Centraliza o contêiner de imagens */
+    max-width: 400px; /* Ajuste conforme necessário */
+}
+
+.container-imagens img {
+    width: 100%;
+    height: 100%;
+    border-radius: 0.5rem;
+    object-fit: cover; /* Mantém a proporção da imagem sem esticar */
+}
+
+.container-imagens.one img {
+    height: 400px; /* Altura maior para uma única imagem */
+}
+
+.container-imagens.two {
+    grid-template-columns: repeat(2, 1fr); /* 2 colunas */
+}
+
+.container-imagens.three {
+    grid-template-columns: repeat(2, 1fr); /* 2 colunas */
+    grid-template-rows: auto auto; /* 2 linhas */
+}
+
+.container-imagens.three img:nth-child(3) {
+    grid-column: span 2; /* A terceira imagem ocupa duas colunas */
+    height: 200px; /* Altura fixa para a terceira imagem */
+}
+
+.container-imagens.four {
+    grid-template-columns: repeat(2, 1fr); /* 2 colunas */
+    grid-template-rows: repeat(2, 1fr); /* 2 linhas */
+}
+

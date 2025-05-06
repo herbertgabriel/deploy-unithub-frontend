@@ -1,0 +1,171 @@
+/* Estilo geral para a página */
+.event-details {
+    max-width: 1200px; /* Ajusta a largura máxima */
+    margin: 3rem auto; /* Centraliza o contêiner */
+    padding: 2rem;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+    color: #333;
+  }
+  
+  /* Estilo para o título */
+  .event-details h1 {
+    font-size: 3rem; /* Aumenta o tamanho do título */
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 2rem;
+    color: #003d8a; /* Cor mais escura para destaque */
+    text-transform: uppercase; /* Deixa o texto em maiúsculas */
+    letter-spacing: 1.5px; /* Adiciona espaçamento entre as letras */
+  }
+  
+  /* Estilo para os parágrafos */
+  .event-details p {
+    font-size: 1.2rem; /* Aumenta o tamanho da fonte */
+    margin-bottom: 1.5rem; /* Adiciona espaçamento entre os parágrafos */
+    line-height: 1.8; /* Aumenta o espaçamento entre linhas */
+    text-align: justify; /* Justifica o texto */
+  }
+  
+  /* Destaque para os rótulos */
+  .event-details label {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #0052b4;
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+  
+  /* Estilo para as imagens */
+  .event-images {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; /* Centraliza as imagens */
+    gap: 2rem; /* Aumenta o espaçamento entre as imagens */
+    margin-top: 2rem;
+  }
+  
+  .event-images img {
+    width: calc(33% - 1rem); /* Ajusta a largura das imagens */
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease; /* Adiciona animação ao passar o mouse */
+  }
+  
+  .event-images img:hover {
+    transform: scale(1.05); /* Aumenta levemente a imagem ao passar o mouse */
+  }
+  
+  /* Botões */
+  .event-details button {
+    display: inline-block;
+    padding: 12px 25px;
+    margin: 15px 10px 0 0;
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #ffffff;
+    background-color: #0052b4;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+  
+  .event-details button:hover {
+    background-color: #003d8a;
+    transform: translateY(-3px); /* Eleva o botão ao passar o mouse */
+  }
+  
+  .event-details button.red {
+    background-color: #a80000;
+  }
+  
+  .event-details button.red:hover {
+    background-color: #800000;
+  }
+  
+  /* Estilo para o popup */
+  .popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #ffffff;
+    padding: 2.5rem;
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+    z-index: 1000;
+    text-align: center;
+  }
+  
+  .popup h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    color: #0052b4;
+  }
+  
+  .popup p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    color: #333;
+  }
+  
+  .popup button {
+    padding: 12px 25px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #ffffff;
+    background-color: #0052b4;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  
+  .popup button:hover {
+    background-color: #003d8a;
+  }
+  
+  /* Responsividade */
+  @media (max-width: 1024px) {
+    .event-details {
+      padding: 1.5rem;
+    }
+  
+    .event-details h1 {
+      font-size: 2.5rem;
+    }
+  
+    .event-details p {
+      font-size: 1.1rem;
+    }
+  
+    .event-images img {
+      width: calc(50% - 1rem); /* Ajusta as imagens para 50% da largura */
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .event-details {
+      padding: 1rem;
+    }
+  
+    .event-details h1 {
+      font-size: 2rem;
+    }
+  
+    .event-details p {
+      font-size: 1rem;
+    }
+  
+    .event-images img {
+      width: 100%; /* Imagens ocupam 100% da largura em telas menores */
+    }
+  
+    .event-details button {
+      width: 100%;
+      margin-bottom: 15px;
+    }
+  }
