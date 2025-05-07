@@ -4,10 +4,11 @@ import { httpStatusMessagesLogin } from "../../../utils/httpStatusMessages";
 import Popup from "../../Popup/Popup";
 import {
   GoogleReCaptchaProvider,
-  GoogleReCaptcha
-} from 'react-google-recaptcha-v3';
+  GoogleReCaptcha,
+} from "react-google-recaptcha-v3";
 
 const RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
+
 function LoginForm({ apiUrl, login }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -73,8 +74,8 @@ function LoginForm({ apiUrl, login }) {
     }
   };
 
-  const handleCaptchaChange = (value) => {
-    setCaptchaValue(value); // Atualiza o valor do reCAPTCHA
+  const handleVerify = (token) => {
+    setCaptchaValue(token); // Atualiza o valor do reCAPTCHA
   };
 
   return (
@@ -108,13 +109,12 @@ function LoginForm({ apiUrl, login }) {
           />
         </div>
         <div>
-
-            <GoogleReCaptchaProvider reCaptchaKey={RECAPTCHA_SITE_KEY}>
-    <GoogleReCaptcha onVerify={handleVerify} 
-    onChange={handleCaptchaChange}
-    className="recaptcha" // Adiciona uma classe para estilização
-    />
-  </GoogleReCaptchaProvider>
+          <GoogleReCaptchaProvider reCaptchaKey={RECAPTCHA_SITE_KEY}>
+            <GoogleReCaptcha
+              onVerify={handleVerify} 
+              className="recaptcha" 
+            />
+          </GoogleReCaptchaProvider>
         </div>
 
         <button type="submit">Entrar</button>
