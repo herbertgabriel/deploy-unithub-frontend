@@ -61,7 +61,7 @@
 
 .box-conteudo {
   background-color: #FFF;
-  width: 21rem;
+  width: 20rem;
   overflow-x: hidden; 
   padding: 1rem 2rem;
   margin: 0 0 0 2rem;
@@ -84,4 +84,16 @@
   font-weight: lighter;
   font-size: 18px;
   line-height: 1.5rem;
+}
+
+@media (max-width: 1224px) {
+  .box-conteudo {
+    width: 15rem; /* Reduz a largura para telas menores */
+  }
+}
+
+@media (max-width: 600px) {
+  .box-conteudo {
+    width: 16rem; /* Reduz ainda mais a largura para telas pequenas */
+  }
 }

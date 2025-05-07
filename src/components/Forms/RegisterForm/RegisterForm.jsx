@@ -2,9 +2,13 @@ import { useState, useEffect } from "react";
 import { sanitizeInput, validateRegisterForm } from "../../../utils/validations";
 import { httpStatusMessagesLogin } from "../../../utils/httpStatusMessages";
 import Popup from "../../Popup/Popup";
-import ReCAPTCHA from "react-google-recaptcha";
+import {
+  GoogleReCaptchaProvider,
+  GoogleReCaptcha,
+} from "react-google-recaptcha-v3";
 
 const RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
+
 function RegisterForm({ apiUrl, setPopupData, setIsRegister }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -35,7 +39,6 @@ function RegisterForm({ apiUrl, setPopupData, setIsRegister }) {
     fetchCourses();
   }, [apiUrl]);
 
-  
   const handleRegister = async (e) => {
     e.preventDefault();
 
@@ -87,15 +90,12 @@ function RegisterForm({ apiUrl, setPopupData, setIsRegister }) {
         }
         throw new Error(httpStatusMessagesLogin[response.status] || "Erro ao realizar cadastro.");
       }
-      if (!response.ok) {
-        throw new Error(httpStatusMessagesLogin[response.status] || "Erro ao realizar cadastro.");
-      }
-      
+
       setPopupData({
         title: "Bem-vindo!",
         message: "Seu cadastro foi realizado com sucesso!",
         onClose: () => {
-            setIsRegister(false);
+          setIsRegister(false);
         },
       });
       setTimeout(() => {
@@ -107,96 +107,97 @@ function RegisterForm({ apiUrl, setPopupData, setIsRegister }) {
     }
   };
 
-  const handleCaptchaChange = (value) => {
-    setCaptchaValue(value); // Atualiza o valor do reCAPTCHA
+  const handleVerify = (token) => {
+    setCaptchaValue(token); // Atualiza o valor do reCAPTCHA
   };
 
   return (
-    <>
-      {showPopup && (
-        <Popup
-          title={popupData.title}
-          message={popupData.message}
-          onClose={() => setShowPopup(false)}
-        />
-      )}
-      <form onSubmit={handleRegister} className="register-form">
-        <div>
-          <label htmlFor="name">Nome:</label>
-          <input
-            type="text"
-            id="name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
+    <GoogleReCaptchaProvider reCaptchaKey={RECAPTCHA_SITE_KEY}>
+      <>
+        {showPopup && (
+          <Popup
+            title={popupData.title}
+            message={popupData.message}
+            onClose={() => setShowPopup(false)}
           />
-        </div>
-        <div>
-          <label htmlFor="telephone">Telefone:</label>
-          <input
-            type="text"
-            id="telephone"
-            value={telephone}
-            onChange={(e) => setTelephone(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="email">Email:</label>
-          <input
-            type="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="password">Senha:</label>
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="confirmPassword">Confirmar Senha:</label>
-          <input
-            type="password"
-            id="confirmPassword"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="course">Curso:</label>
-          <select
-            id="course"
-            value={courseId}
-            onChange={(e) => setCourseId(e.target.value)}
-            required
-          >
-            <option value="">Selecione um curso</option>
-            {courses.map((course) => (
-              <option key={course.cursoId} value={course.cursoId}>
-                {course.nome}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div>
-          <ReCAPTCHA
-            sitekey={RECAPTCHA_SITE_KEY} // Substitua pelo seu sitekey
-            onChange={handleCaptchaChange} // Define a função para capturar o token
-            className="recaptcha"
-          />
-        </div>
-        <button type="submit">Cadastrar</button>
-      </form>
-    </>
+        )}
+        <form onSubmit={handleRegister} className="register-form">
+          <div>
+            <label htmlFor="name">Nome:</label>
+            <input
+              type="text"
+              id="name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+            />
+          </div>
+          <div>
+            <label htmlFor="telephone">Telefone:</label>
+            <input
+              type="text"
+              id="telephone"
+              value={telephone}
+              onChange={(e) => setTelephone(e.target.value)}
+              required
+            />
+          </div>
+          <div>
+            <label htmlFor="email">Email:</label>
+            <input
+              type="email"
+              id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+          <div>
+            <label htmlFor="password">Senha:</label>
+            <input
+              type="password"
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+          <div>
+            <label htmlFor="confirmPassword">Confirmar Senha:</label>
+            <input
+              type="password"
+              id="confirmPassword"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+            />
+          </div>
+          <div>
+            <label htmlFor="course">Curso:</label>
+            <select
+              id="course"
+              value={courseId}
+              onChange={(e) => setCourseId(e.target.value)}
+              required
+            >
+              <option value="">Selecione um curso</option>
+              {courses.map((course) => (
+                <option key={course.cursoId} value={course.cursoId}>
+                  {course.nome}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <GoogleReCaptcha
+              onVerify={handleVerify} // Captura o token do reCAPTCHA
+              className="recaptcha" // Adiciona uma classe para estilização
+            />
+          </div>
+          <button type="submit">Cadastrar</button>
+        </form>
+      </>
+    </GoogleReCaptchaProvider>
   );
 }
 

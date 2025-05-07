@@ -2,7 +2,10 @@ import { useState } from "react";
 import { sanitizeInput, validateLoginForm } from "../../../utils/validations";
 import { httpStatusMessagesLogin } from "../../../utils/httpStatusMessages";
 import Popup from "../../Popup/Popup";
-import ReCAPTCHA from "react-google-recaptcha";
+import {
+  GoogleReCaptchaProvider,
+  GoogleReCaptcha
+} from 'react-google-recaptcha-v3';
 
 const RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
 function LoginForm({ apiUrl, login }) {
@@ -105,11 +108,13 @@ function LoginForm({ apiUrl, login }) {
           />
         </div>
         <div>
-          <ReCAPTCHA
-            sitekey={RECAPTCHA_SITE_KEY}
-            onChange={handleCaptchaChange} 
-            className="recaptcha" // Adiciona uma classe para estilização
-          />
+
+            <GoogleReCaptchaProvider reCaptchaKey={RECAPTCHA_SITE_KEY}>
+    <GoogleReCaptcha onVerify={handleVerify} 
+    onChange={handleCaptchaChange}
+    className="recaptcha" // Adiciona uma classe para estilização
+    />
+  </GoogleReCaptchaProvider>
         </div>
 
         <button type="submit">Entrar</button>

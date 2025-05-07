@@ -7,6 +7,7 @@ import Button from "../../components/Button/Button";
 import Popup from "../../components/Popup/Popup";
 import SubscribersList from "../../components/SubscribersList/SubscribersList";
 import Cookies from "js-cookie";
+import { IoMdArrowBack } from "react-icons/io";
 
 function EventDetails() {
     const { id } = useParams(); // Obtém o parâmetro 'id' da URL
@@ -124,7 +125,8 @@ function EventDetails() {
             <Header />
             {eventDetails && (
                 <main className="event-details">
-                <h1>{eventDetails.title}</h1>
+                    <IoMdArrowBack className="voltar-button" onClick={() => window.history.back()} style={{ cursor: "pointer" }} />
+                    <h1>{eventDetails.title}</h1>
               
                 <div>
                   <label htmlFor="description">Descrição:</label>
