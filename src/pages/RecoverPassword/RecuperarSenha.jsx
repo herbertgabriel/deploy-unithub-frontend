@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import ReCAPTCHA from "react-google-recaptcha";
+import { GoogleReCaptchaProvider, GoogleReCaptcha } from "react-google-recaptcha-v3";
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
 import "./RecuperarSenha.css";
@@ -15,26 +15,29 @@ function RecuperarSenha() {
     const [confirmaSenha, setConfirmaSenha] = useState("");
     const [mensagem, setMensagem] = useState("");
     const [erroSenha, setErroSenha] = useState(false); // Estado para indicar erro de validação
-    const [captchaValidado, setCaptchaValidado] = useState(false); // Estado para controlar a validação do reCAPTCHA
+    const [captchaValue, setCaptchaValue] = useState(null); // Valor do reCAPTCHA
 
-    const handleCaptchaChange = (value) => {
-        if (value) {
-            setCaptchaValidado(true); // Marca o reCAPTCHA como validado
-        }
+    const handleVerify = (token) => {
+        setCaptchaValue(token); // Atualiza o valor do reCAPTCHA
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-    
+
         if (novaSenha !== confirmaSenha) {
             setErroSenha(true);
             setMensagem("As senhas não coincidem.");
             return;
         }
-    
+
+        if (!captchaValue) {
+            setMensagem("Por favor, complete o reCAPTCHA.");
+            return;
+        }
+
         setErroSenha(false);
         setMensagem("");
-    
+
         try {
             const response = await fetch(`${apiUrl}/reset-password`, {
                 method: "PATCH",
@@ -44,9 +47,10 @@ function RecuperarSenha() {
                 },
                 body: JSON.stringify({
                     password: novaSenha,
+                    recaptchaToken: captchaValue, // Envia o token do reCAPTCHA
                 }),
             });
-    
+
             if (!response.ok) {
                 let errorMessage = "Erro ao alterar a senha. Tente novamente.";
                 try {
@@ -56,37 +60,26 @@ function RecuperarSenha() {
                     console.error("Erro ao processar a resposta JSON:", e);
                 }
                 setMensagem(errorMessage);
-                setCaptchaValidado(false); // Volta para o reCAPTCHA
                 return;
             }
-    
+
             setMensagem("Senha alterada com sucesso!");
             setTimeout(() => navigate("/login"), 3000);
         } catch (error) {
             console.error("Erro na requisição:", error);
             setMensagem("Erro ao conectar ao servidor.");
-            setCaptchaValidado(false); // Volta para o reCAPTCHA
         }
     };
 
     return (
-        <>
-            <Header />
+        <GoogleReCaptchaProvider reCaptchaKey={RECAPTCHA_SITE_KEY}>
+            <>
+                <Header />
 
-            <main className="recuperar-container">
-                <div className="recuperar-card">
-                    <h2>Recuperar Senha</h2>
-                    {!captchaValidado ? (
-                        <div className="recaptcha-container">
-                            <p>Por favor, complete o reCAPTCHA para continuar.</p>
-                            <br />
-                            <ReCAPTCHA
-                                sitekey={RECAPTCHA_SITE_KEY}
-                                onChange={handleCaptchaChange}
-                                id="recaptcha-recuperar-senha"
-                            />
-                        </div>
-                    ) : (
+                <main className="recuperar-container">
+                    <div className="recuperar-card">
+                        <h2>Recuperar Senha</h2>
+                        <GoogleReCaptcha onVerify={handleVerify} />
                         <form className="recuperar-form" onSubmit={handleSubmit}>
                             <label htmlFor="novaSenha">Senha</label>
                             <input
@@ -111,13 +104,13 @@ function RecuperarSenha() {
                                 <button type="submit" className="button-template">Salvar</button>
                             </div>
                         </form>
-                    )}
-                    {mensagem && <p className="mensagem">{mensagem}</p>}
-                </div>
-            </main>
+                        {mensagem && <p className="mensagem">{mensagem}</p>}
+                    </div>
+                </main>
 
-            <Footer />
-        </>
+                <Footer />
+            </>
+        </GoogleReCaptchaProvider>
     );
 }
 
