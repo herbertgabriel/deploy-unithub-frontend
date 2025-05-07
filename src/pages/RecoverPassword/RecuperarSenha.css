@@ -3,7 +3,11 @@
     justify-content: center;
     align-items: center;
     height: 80vh;
-    background-color: #111;
+}
+
+.recuperar-container .button-template{
+    background-color: green;
+    border-color: green;
 }
 
 .recuperar-card {
@@ -36,24 +40,10 @@
 
 .botoes {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     margin-top: 1rem;
 }
 
-.btn-salvar {
-    background-color: green;
-    color: white;
-    border: none;
-    padding: 0.6rem 1.5rem;
-    border-radius: 999px;
-    cursor: pointer;
-}
-
-.btn-cancelar {
-    background-color: red;
-    color: white;
-    border: none;
-    padding: 0.6rem 1.5rem;
-    border-radius: 999px;
-    cursor: pointer;
+#recaptcha-recuperar-senha{
+    margin: 0 3rem;
 }

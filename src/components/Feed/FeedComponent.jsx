@@ -14,14 +14,19 @@ function FeedComponent({
 }) {
   const [feedItems, setFeedItems] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [page, setPage] = useState(0);
-  const [totalPages, setTotalPages] = useState(1);
+  const [page, setPage] = useState(1); // Página inicial é 1
+  const [totalPages, setTotalPages] = useState(1); // Total de páginas será atualizado pela API
 
   useEffect(() => {
     const fetchFeed = async () => {
       setLoading(true);
       try {
-        const response = await fetch(`${apiUrl}${fetchUrl}&page=${page}`, {
+        // Construir a URL com o parâmetro de página correto (pages)
+        const separator = fetchUrl.includes("?") ? "&" : "?";
+        const url = `${apiUrl}${fetchUrl}${separator}pages=${page}`;
+        console.log("Requisição para URL:", url);
+
+        const response = await fetch(url, {
           headers: token ? { Authorization: `Bearer ${token}` } : {},
         });
 
@@ -30,8 +35,11 @@ function FeedComponent({
         }
 
         const data = await response.json();
+        console.log("Dados recebidos:", data);
+
+        // Atualiza os itens do feed e o total de páginas
         setFeedItems(data.feedItems || []);
-        setTotalPages(data.totalPages || 1);
+        setTotalPages(data.totalPages || 1); // Atualiza o total de páginas com base na API
       } catch (error) {
         console.error("Erro ao buscar o feed:", error);
       } finally {
@@ -40,17 +48,19 @@ function FeedComponent({
     };
 
     fetchFeed();
-  }, [apiUrl, fetchUrl, page, token]);
+  }, [apiUrl, fetchUrl, page, token]); // Inclui `page` como dependência
 
   const handlePreviousPage = () => {
-    if (page > 0) {
-      setPage((prevPage) => prevPage - 1);
+    if (page > 1) { // Página inicial é 1
+      console.log("Alterando para página anterior:", page - 1);
+      setPage((prevPage) => prevPage - 1); // Atualiza o estado da página
     }
   };
 
   const handleNextPage = () => {
-    if (page < totalPages - 1) {
-      setPage((prevPage) => prevPage + 1);
+    if (page < totalPages) {
+      console.log("Alterando para próxima página:", page + 1);
+      setPage((prevPage) => prevPage + 1); // Atualiza o estado da página
     }
   };
 

@@ -17,7 +17,7 @@ function MainRouter() {
         <Route path="/" element={<Feed/>} index />
         <Route path="/profile" element={<Perfil />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/recuperar-senha" element={<RecuperarSenha />} />
+        <Route path="/recover/:id" element={<RecuperarSenha />} />
         <Route path="/cursos" element={<Cursos />} />
         <Route path="/meus-eventos" element={<MeusEventos />} />
         <Route path="/eventos-inscritos" element={<EventosInscritos />} />
