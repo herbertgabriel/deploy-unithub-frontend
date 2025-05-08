@@ -16,7 +16,7 @@ function Carousel() {
     slidesToShow: 3,
     slidesToScroll: 1,
     autoplay: true,
-    autoplaySpeed: 5000, // Tempo em segundos
+    autoplaySpeed: 5000,
     responsive: [
       {
         breakpoint: 1024,
@@ -40,7 +40,7 @@ function Carousel() {
 
   useEffect(() => {
     const fetchCarouselData = async () => {
-      const apiUrl = import.meta.env.VITE_API_BASE_URL; // Obtém a URL da API
+      const apiUrl = import.meta.env.VITE_API_BASE_URL;
       setLoading(true);
       try {
         const response = await fetch(`${apiUrl}/events/feed`);
@@ -49,12 +49,11 @@ function Carousel() {
         }
         const data = await response.json();
 
-        // Mapeia os itens e formata a data
         const allData = (data.feedItems || []).map((item) => ({
           ...item,
           formattedDate: new Date(item.dateTime).toLocaleDateString("pt-BR", {
             day: "2-digit",
-            month: "long", // Exibe o mês como string (ex: "Abril")
+            month: "long",
             year: "numeric",
           }),
         }));
@@ -69,6 +68,11 @@ function Carousel() {
 
     fetchCarouselData();
   }, []);
+
+  // Não renderizar o carrossel se tiver menos de 3 itens
+  if (carouselData.length < 3) {
+    return null;
+  }
 
   return (
     <div>
