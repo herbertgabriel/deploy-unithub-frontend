@@ -3,6 +3,7 @@ import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
 import "./CriarPublicacao.css";
 import Cookies from "js-cookie";
+import Popup from "../../components/Popup/Popup";
 
 function CriarPublicacao() {
     const [title, setTitle] = useState("");
@@ -13,9 +14,11 @@ function CriarPublicacao() {
     const [selectedCategories, setSelectedCategories] = useState(new Set());
     const [maxParticipants, setMaxParticipants] = useState("");
     const [images, setImages] = useState([null, null, null, null]);
-    const [successMessage, setSuccessMessage] = useState("");
-    const [errorMessage, setErrorMessage] = useState("");
+    const [showPopup, setShowPopup] = useState(false);
+    const [popupData, setPopupData] = useState({ title: "", message: "" });
     const apiUrl = import.meta.env.VITE_API_BASE_URL;
+
+    const MAX_CHARACTERS = 250;
 
     useEffect(() => {
         // Simula categorias fixas
@@ -42,22 +45,82 @@ function CriarPublicacao() {
 
     const handleImageChange = (index, file) => {
         if (file && !["image/jpeg", "image/png", "image/svg+xml"].includes(file.type)) {
-            setErrorMessage("Apenas arquivos JPEG, PNG e SVG são permitidos.");
+            setPopupData({ title: "Erro", message: "Apenas arquivos JPEG, PNG e SVG são permitidos." });
+            setShowPopup(true);
             return;
         }
         const updatedImages = [...images];
         updatedImages[index] = file;
         setImages(updatedImages);
-        setErrorMessage("");
+    };
+
+    const handleMaxParticipantsChange = (e) => {
+        const value = e.target.value;
+        if (value === "" || (Number(value) >= 0 && Number(value) <= 1000)) {
+            setMaxParticipants(value);
+        }
+    };
+
+    const handleTextChange = (setter, value) => {
+        if (value.length <= MAX_CHARACTERS) {
+            setter(value);
+        }
+    };
+
+    const validateForm = () => {
+        if (!title.trim()) {
+            setPopupData({ title: "Erro", message: "O título é obrigatório." });
+            return false;
+        }
+        if (title.length > MAX_CHARACTERS) {
+            setPopupData({ title: "Erro", message: `O título deve ter no máximo ${MAX_CHARACTERS} caracteres.` });
+            return false;
+        }
+        if (!description.trim()) {
+            setPopupData({ title: "Erro", message: "A descrição é obrigatória." });
+            return false;
+        }
+        if (description.length > MAX_CHARACTERS) {
+            setPopupData({ title: "Erro", message: `A descrição deve ter no máximo ${MAX_CHARACTERS} caracteres.` });
+            return false;
+        }
+        if (!dateTime) {
+            setPopupData({ title: "Erro", message: "A data e hora são obrigatórias." });
+            return false;
+        }
+        if (!location.trim()) {
+            setPopupData({ title: "Erro", message: "A localização é obrigatória." });
+            return false;
+        }
+        if (location.length > MAX_CHARACTERS) {
+            setPopupData({ title: "Erro", message: `A localização deve ter no máximo ${MAX_CHARACTERS} caracteres.` });
+            return false;
+        }
+        if (selectedCategories.size === 0) {
+            setPopupData({ title: "Erro", message: "Selecione pelo menos uma categoria." });
+            return false;
+        }
+        if (!maxParticipants || Number(maxParticipants) <= 0) {
+            setPopupData({ title: "Erro", message: "O número máximo de participantes deve ser maior que zero." });
+            return false;
+        }
+        return true;
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        if (!validateForm()) {
+            setShowPopup(true);
+            return;
+        }
+
         try {
             const token = Cookies.get("jwtToken");
             if (!token) {
-                throw new Error("Você não está autenticado.");
+                setPopupData({ title: "Erro", message: "Você não está autenticado. Por favor, faça login." });
+                setShowPopup(true);
+                return;
             }
 
             const formData = new FormData();
@@ -82,10 +145,17 @@ function CriarPublicacao() {
             });
 
             if (!response.ok) {
-                throw new Error("Erro ao criar o evento.");
+                const errorData = await response.json();
+                throw new Error(errorData.message || "Erro ao criar o evento.");
             }
 
-            setSuccessMessage("Evento criado com sucesso!");
+            setPopupData({ 
+                title: "Sucesso", 
+                message: "Evento criado com sucesso!" 
+            });
+            setShowPopup(true);
+            
+            // Reset form
             setTitle("");
             setDescription("");
             setDateTime("");
@@ -94,7 +164,8 @@ function CriarPublicacao() {
             setMaxParticipants("");
             setImages([null, null, null, null]);
         } catch (error) {
-            setErrorMessage(error.message);
+            setPopupData({ title: "Erro", message: error.message });
+            setShowPopup(true);
         }
     };
 
@@ -103,25 +174,31 @@ function CriarPublicacao() {
             <Header />
             <div className="criar-publicacao-container">
                 <h1>Criar Evento</h1>
-                {successMessage && <p className="success-message">{successMessage}</p>}
-                {errorMessage && <p className="error-message">{errorMessage}</p>}
                 <form onSubmit={handleSubmit}>
                     <div className="form-group">
                         <label>Título:</label>
                         <input
                             type="text"
                             value={title}
-                            onChange={(e) => setTitle(e.target.value)}
+                            onChange={(e) => handleTextChange(setTitle, e.target.value)}
+                            maxLength={MAX_CHARACTERS}
                             required
                         />
+                        <div className="character-counter">
+                            {title.length}/{MAX_CHARACTERS} caracteres
+                        </div>
                     </div>
                     <div className="form-group">
                         <label>Descrição:</label>
                         <textarea
                             value={description}
-                            onChange={(e) => setDescription(e.target.value)}
+                            onChange={(e) => handleTextChange(setDescription, e.target.value)}
+                            maxLength={MAX_CHARACTERS}
                             required
                         ></textarea>
+                        <div className="character-counter">
+                            {description.length}/{MAX_CHARACTERS} caracteres
+                        </div>
                     </div>
                     <div className="form-group">
                         <label>Data e Hora:</label>
@@ -137,57 +214,71 @@ function CriarPublicacao() {
                         <input
                             type="text"
                             value={location}
-                            onChange={(e) => setLocation(e.target.value)}
+                            onChange={(e) => handleTextChange(setLocation, e.target.value)}
+                            maxLength={MAX_CHARACTERS}
                             required
                         />
+                        <div className="character-counter">
+                            {location.length}/{MAX_CHARACTERS} caracteres
+                        </div>
                     </div>
                     <div className="form-group">
                         <div className="categorias">
-                        <label>Categorias:</label>
-                        {categories.map((cat) => (
-                            <div key={cat.id}>
-                                <input
-                                    type="checkbox"
-                                    value={cat.id}
-                                    onChange={handleCategoryChange}
-                                />
-                                <label>{cat.name}</label>
-                            </div>
-                        ))}
-                    </div>
+                            <label>Categorias:</label>
+                            {categories.map((cat) => (
+                                <div key={cat.id}>
+                                    <input
+                                        type="checkbox"
+                                        value={cat.id}
+                                        onChange={handleCategoryChange}
+                                        checked={selectedCategories.has(cat.id)}
+                                    />
+                                    <label>{cat.name}</label>
+                                </div>
+                            ))}
+                        </div>
                     </div>
                     <div className="form-group">
                         <label>Máximo de Participantes:</label>
                         <input
                             type="number"
                             value={maxParticipants}
-                            onChange={(e) => setMaxParticipants(e.target.value)}
+                            onChange={handleMaxParticipantsChange}
+                            min="1"
+                            max="1000"
                             required
                         />
                     </div>
-                        <div className="form-group">
-                            <label>Imagens (JPEG, PNG, SVG) - Opcional:</label>
-                            {[0, 1, 2, 3].map((index) => (
-                                <div key={index} style={{ marginBottom: "10px" }}>
-                                    <label htmlFor={`file-upload-${index}`} id="file-upload-label">
-                                        Escolher Arquivo
-                                    </label>
-                                    <input
-                                        id={`file-upload-${index}`}
-                                        type="file"
-                                        accept="image/jpeg, image/png, image/svg+xml"
-                                        onChange={(e) => handleImageChange(index, e.target.files[0])}
-                                    />
-                                    <span className="file-upload-text">
-                                        {images[index] ? images[index].name : "Nenhum arquivo escolhido"}
-                                    </span>
-                                </div>
-                            ))}
-                        </div>
-                        <button type="submit">Criar Evento</button>
-                    </form>
-                </div>
+                    <div className="form-group">
+                        <label>Imagens (JPEG, PNG, SVG) - Opcional:</label>
+                        {[0, 1, 2, 3].map((index) => (
+                            <div key={index} style={{ marginBottom: "10px" }}>
+                                <label htmlFor={`file-upload-${index}`} id="file-upload-label">
+                                    Escolher Arquivo
+                                </label>
+                                <input
+                                    id={`file-upload-${index}`}
+                                    type="file"
+                                    accept="image/jpeg, image/png, image/svg+xml"
+                                    onChange={(e) => handleImageChange(index, e.target.files[0])}
+                                />
+                                <span className="file-upload-text">
+                                    {images[index] ? images[index].name : "Nenhum arquivo escolhido"}
+                                </span>
+                            </div>
+                        ))}
+                    </div>
+                    <button type="submit">Criar Evento</button>
+                </form>
+            </div>
             <Footer />
+            {showPopup && (
+                <Popup
+                    title={popupData.title}
+                    message={popupData.message}
+                    onClose={() => setShowPopup(false)}
+                />
+            )}
         </>
     );
 }
