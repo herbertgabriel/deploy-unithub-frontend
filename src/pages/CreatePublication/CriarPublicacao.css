@@ -165,3 +165,18 @@
     display: inline-block;
     vertical-align: middle; /* Alinha o texto ao centro do botão */
 }
+
+.character-counter {
+    font-size: 0.8rem;
+    color: white;
+    text-align: right;
+    margin-top: 0.25rem;
+}
+
+.character-counter.warning {
+    color: orange;
+}
+
+.character-counter.error {
+    color: red;
+}
