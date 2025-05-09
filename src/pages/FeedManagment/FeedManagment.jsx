@@ -114,7 +114,7 @@ function FeedManagment() {
   return (
     <>
       <Header />
-      <main>
+      <main className="feed-container">
         <FeedComponent
           apiUrl={apiUrl}
           fetchUrl={fetchUrl}

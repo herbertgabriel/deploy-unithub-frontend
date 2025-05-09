@@ -3,6 +3,7 @@ import { useState } from "react";
 import { GoogleReCaptchaProvider, GoogleReCaptcha } from "react-google-recaptcha-v3";
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
+import Popup from "../../components/Popup/Popup"; // Importa o componente Popup
 import "./RecuperarSenha.css";
 
 const RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
@@ -13,9 +14,9 @@ function RecuperarSenha() {
     const navigate = useNavigate(); // Hook para redirecionamento
     const [novaSenha, setNovaSenha] = useState("");
     const [confirmaSenha, setConfirmaSenha] = useState("");
-    const [mensagem, setMensagem] = useState("");
-    const [erroSenha, setErroSenha] = useState(false); // Estado para indicar erro de validação
     const [captchaValue, setCaptchaValue] = useState(null); // Valor do reCAPTCHA
+    const [showPopup, setShowPopup] = useState(false); // Estado para controlar o Popup
+    const [popupData, setPopupData] = useState({ title: "", message: "" }); // Dados do Popup
 
     const handleVerify = (token) => {
         setCaptchaValue(token); // Atualiza o valor do reCAPTCHA
@@ -24,19 +25,25 @@ function RecuperarSenha() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        // Validação: Senhas não coincidem
         if (novaSenha !== confirmaSenha) {
-            setErroSenha(true);
-            setMensagem("As senhas não coincidem.");
+            setPopupData({
+                title: "Erro",
+                message: "As senhas não coincidem.",
+            });
+            setShowPopup(true);
             return;
         }
 
+        // Validação: reCAPTCHA não completado
         if (!captchaValue) {
-            setMensagem("Por favor, complete o reCAPTCHA.");
+            setPopupData({
+                title: "Erro",
+                message: "Por favor, complete o reCAPTCHA.",
+            });
+            setShowPopup(true);
             return;
         }
-
-        setErroSenha(false);
-        setMensagem("");
 
         try {
             const response = await fetch(`${apiUrl}/reset-password`, {
@@ -51,23 +58,32 @@ function RecuperarSenha() {
                 }),
             });
 
+            // Erro de requisição ao servidor
             if (!response.ok) {
-                let errorMessage = "Erro ao alterar a senha. Tente novamente.";
-                try {
-                    const errorData = await response.json();
-                    errorMessage = errorData.message || errorMessage;
-                } catch (e) {
-                    console.error("Erro ao processar a resposta JSON:", e);
-                }
-                setMensagem(errorMessage);
+                setPopupData({
+                    title: "Erro",
+                    message: "Link de recuperação expirou, solicite novamente.",
+                });
+                setShowPopup(true);
+                setTimeout(() => navigate("/login"), 3000); // Redireciona para /login após 3 segundos
                 return;
             }
 
-            setMensagem("Senha alterada com sucesso!");
-            setTimeout(() => navigate("/login"), 3000);
+            // Sucesso
+            setPopupData({
+                title: "Sucesso",
+                message: "Senha alterada com sucesso!",
+            });
+            setShowPopup(true);
+            setTimeout(() => navigate("/login"), 3000); // Redireciona para /login após 3 segundos
         } catch (error) {
-            console.error("Erro na requisição:", error);
-            setMensagem("Erro ao conectar ao servidor.");
+            // Erro de conexão ou requisição
+            setPopupData({
+                title: "Erro",
+                message: "Link de recuperação expirou, solicite novamente.",
+            });
+            setShowPopup(true);
+            setTimeout(() => navigate("/login"), 3000); // Redireciona para /login após 3 segundos
         }
     };
 
@@ -88,7 +104,6 @@ function RecuperarSenha() {
                                 placeholder="Nova senha"
                                 value={novaSenha}
                                 onChange={(e) => setNovaSenha(e.target.value)}
-                                className={erroSenha ? "input-erro" : ""}
                             />
                             <label htmlFor="confirmaSenha">Confirme a senha</label>
                             <input
@@ -97,18 +112,24 @@ function RecuperarSenha() {
                                 placeholder="Confirme a senha"
                                 value={confirmaSenha}
                                 onChange={(e) => setConfirmaSenha(e.target.value)}
-                                className={erroSenha ? "input-erro" : ""}
                             />
 
                             <div className="botoes">
                                 <button type="submit" className="button-template">Salvar</button>
                             </div>
                         </form>
-                        {mensagem && <p className="mensagem">{mensagem}</p>}
                     </div>
                 </main>
 
                 <Footer />
+
+                {showPopup && (
+                    <Popup
+                        title={popupData.title}
+                        message={popupData.message}
+                        onClose={() => setShowPopup(false)}
+                    />
+                )}
             </>
         </GoogleReCaptchaProvider>
     );

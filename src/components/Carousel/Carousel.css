@@ -76,6 +76,9 @@
   letter-spacing: -1px;
   font-size: 30px;
   line-height: 2.4rem;
+  white-space: nowrap; /* Impede que o texto quebre em várias linhas */
+  overflow: hidden; /* Esconde o texto que ultrapassa o limite */
+  text-overflow: ellipsis; /* Adiciona "..." ao final do texto truncado */
 }
 
 .box-description {
@@ -84,6 +87,9 @@
   font-weight: lighter;
   font-size: 18px;
   line-height: 1.5rem;
+  white-space: nowrap; 
+  overflow: hidden; 
+  text-overflow: ellipsis;
 }
 
 @media (max-width: 1224px) {

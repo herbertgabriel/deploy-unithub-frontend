@@ -126,73 +126,77 @@ function EventDetails() {
             {eventDetails && (
                 <main className="event-details">
                     <IoMdArrowBack className="voltar-button" onClick={() => window.history.back()} style={{ cursor: "pointer" }} />
-                    <h1>{eventDetails.title}</h1>
-              
-                <div>
-                  <label htmlFor="description">Descrição:</label>
-                  <p id="description">{eventDetails.description}</p>
-                </div>
-              
-                <div>
-                  <label htmlFor="dateTime">Data e Hora:</label>
-                  <p id="dateTime">
-                    {new Date(eventDetails.dateTime).toLocaleString("pt-BR", {
-                      day: "2-digit",
-                      month: "long",
-                      year: "numeric",
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}
-                  </p>
-                </div>
-              
-                <div>
-                  <label htmlFor="location">Local:</label>
-                  <p id="location">{eventDetails.location}</p>
-                </div>
-              
-                <div>
-                  <label htmlFor="categories">Categorias:</label>
-                  <p id="categories">{eventDetails.categories.join(", ")}</p>
-                </div>
-              
-                <div>
-                  <label htmlFor="active">Ativo:</label>
-                  <p id="active">{eventDetails.active ? "Sim" : "Não"}</p>
-                </div>
-              
-                <div>
-                  <label htmlFor="maxParticipants">Máximo de Participantes:</label>
-                  <p id="maxParticipants">
-                    {eventDetails.maxParticipants || "Sem limite"}
-                  </p>
-                </div>
-              
-                {/* Exibe as imagens do evento */}
-                {eventDetails.images && eventDetails.images.length > 0 && (
-                  <div className="event-images">
-                    {eventDetails.images.slice(0, 4).map((image, index) => (
-                      <img
-                        key={index}
-                        src={image}
-                        alt={`Imagem ${index + 1}`}
-                        className="event-image"
-                      />
-                    ))}
-                  </div>
-                )}
-              
-                {/* Exibe o botão apenas se maxParticipants for diferente de 0 */}
-                {eventDetails.maxParticipants !== 0 && (
-                  <Button title="Inscrever-se" onClick={handleSubscribe} />
-                )}
-                {(Cookies.get("userRole") === "ORGANIZADOR" || Cookies.get("userRole") === "ADMIN") && (
-                  <>
-                    <Button title="Ver Inscritos" onClick={openSubscribersPopup} />
-                    <Button title="Excluir publicação" onClick={() => handleDelete(id)} color="red" />
-                  </>
-                )}
-              </main>
+
+                    <header className="event-container-header-card">
+                        <h1>{eventDetails.title}</h1>
+
+                        <nav id="buttons-container-event-details">
+                            {eventDetails.maxParticipants !== 0 && (
+                                <Button title="Inscrever-se" onClick={handleSubscribe} />
+                            )}
+                            {(Cookies.get("userRole") === "ORGANIZADOR" || Cookies.get("userRole") === "ADMIN") && (
+                                <>
+                                    <Button title="Ver Inscritos" onClick={openSubscribersPopup} />
+                                    <Button title="Excluir publicação" onClick={() => handleDelete(id)} color="red" />
+                                </>
+                            )}
+                        </nav>
+                    </header>
+
+                    <section className="event-container-header-card">
+                        <div className="event-label">
+                            <label htmlFor="categories">Categorias:</label>
+                            <p id="categories">
+                                {`${eventDetails.categories.join(" | ")} | ${
+                                    eventDetails.isOfficial ? "Oficial" : "Não oficial"
+                                }`}
+                            </p>
+                        </div>
+                        <div className="event-label">
+                            <label htmlFor="maxParticipants">Máximo de Participantes:</label>
+                            <p id="maxParticipants">
+                                {eventDetails.maxParticipants || "Inscrição indisponível"}
+                            </p>
+                        </div>
+                    </section>
+
+                    <section className="event-container-header-card">
+                        <div className="event-label">
+                            <label htmlFor="location">Local:</label>
+                            <p id="location">{eventDetails.location}</p>
+                        </div>
+                        <div className="event-label">
+                            <label htmlFor="dateTime">Data e Hora:</label>
+                            <p id="dateTime">
+                                {new Date(eventDetails.dateTime).toLocaleString("pt-BR", {
+                                    day: "2-digit",
+                                    month: "long",
+                                    year: "numeric",
+                                    hour: "2-digit",
+                                    minute: "2-digit",
+                                })}
+                            </p>
+                        </div>
+                    </section>
+
+                    <section className="event-label-description">
+                        <label htmlFor="description">Descrição:</label>
+                        <p id="description">{eventDetails.description}</p>
+                    </section>
+
+                    {eventDetails.images && eventDetails.images.length > 0 && (
+                        <section className="event-images">
+                            {eventDetails.images.slice(0, 4).map((image, index) => (
+                                <img
+                                    key={index}
+                                    src={image}
+                                    alt={`Imagem ${index + 1}`}
+                                    className="event-image"
+                                />
+                            ))}
+                        </section>
+                    )}
+                </main>
             )}
             {showPopup && (
                 <Popup

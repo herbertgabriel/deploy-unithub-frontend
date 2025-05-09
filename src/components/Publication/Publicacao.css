@@ -42,6 +42,17 @@
     max-width: 150px; /* Ajuste conforme necessário */
 }
 
+.container-titulo h2 {
+    margin: 0;
+    font-size: 1.2rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 650px; /* Ajuste conforme necessário */
+}
+
+
+
 .container-titulo p {
     margin: 0;
     font-size: 0.9rem;
@@ -84,3 +95,10 @@
     grid-template-rows: repeat(2, 1fr); /* 2 linhas */
 }
 
+.container-publication p:last-child {
+    max-width: 650px;
+    white-space: normal; /* Permite que o texto quebre em várias linhas */
+    overflow-wrap: break-word; /* Quebra palavras longas */
+    word-wrap: break-word; /* Compatibilidade com navegadores antigos */
+    margin-bottom: 1rem; /* Adiciona espaçamento inferior */
+}
