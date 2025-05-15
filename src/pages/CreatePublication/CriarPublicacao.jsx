@@ -21,7 +21,6 @@ function CriarPublicacao() {
     const MAX_CHARACTERS = 250;
 
     useEffect(() => {
-        // Simula categorias fixas
         const fixedCategories = [
             { id: 1, name: "TECNOLOGIA" },
             { id: 2, name: "SAUDE" },
@@ -47,6 +46,7 @@ function CriarPublicacao() {
         if (file && !["image/jpeg", "image/png", "image/svg+xml"].includes(file.type)) {
             setPopupData({ title: "Erro", message: "Apenas arquivos JPEG, PNG e SVG são permitidos." });
             setShowPopup(true);
+            setTimeout(() => setShowPopup(false), 3000); // Fecha o popup automaticamente após 3 segundos
             return;
         }
         const updatedImages = [...images];
@@ -70,38 +70,50 @@ function CriarPublicacao() {
     const validateForm = () => {
         if (!title.trim()) {
             setPopupData({ title: "Erro", message: "O título é obrigatório." });
+            setShowPopup(true);
+            setTimeout(() => setShowPopup(false), 3000); // Fecha o popup automaticamente após 3 segundos
             return false;
         }
         if (title.length > MAX_CHARACTERS) {
             setPopupData({ title: "Erro", message: `O título deve ter no máximo ${MAX_CHARACTERS} caracteres.` });
+            setShowPopup(true);
+            setTimeout(() => setShowPopup(false), 3000); // Fecha o popup automaticamente após 3 segundos
             return false;
         }
         if (!description.trim()) {
             setPopupData({ title: "Erro", message: "A descrição é obrigatória." });
+            setShowPopup(true);
+            setTimeout(() => setShowPopup(false), 3000); // Fecha o popup automaticamente após 3 segundos
             return false;
         }
         if (description.length > MAX_CHARACTERS) {
             setPopupData({ title: "Erro", message: `A descrição deve ter no máximo ${MAX_CHARACTERS} caracteres.` });
+            setShowPopup(true);
+            setTimeout(() => setShowPopup(false), 3000); // Fecha o popup automaticamente após 3 segundos
             return false;
         }
         if (!dateTime) {
             setPopupData({ title: "Erro", message: "A data e hora são obrigatórias." });
+            setShowPopup(true);
+            setTimeout(() => setShowPopup(false), 3000); // Fecha o popup automaticamente após 3 segundos
             return false;
         }
         if (!location.trim()) {
             setPopupData({ title: "Erro", message: "A localização é obrigatória." });
-            return false;
-        }
-        if (location.length > MAX_CHARACTERS) {
-            setPopupData({ title: "Erro", message: `A localização deve ter no máximo ${MAX_CHARACTERS} caracteres.` });
+            setShowPopup(true);
+            setTimeout(() => setShowPopup(false), 3000); // Fecha o popup automaticamente após 3 segundos
             return false;
         }
         if (selectedCategories.size === 0) {
             setPopupData({ title: "Erro", message: "Selecione pelo menos uma categoria." });
+            setShowPopup(true);
+            setTimeout(() => setShowPopup(false), 3000); // Fecha o popup automaticamente após 3 segundos
             return false;
         }
         if (!maxParticipants || Number(maxParticipants) <= 0) {
             setPopupData({ title: "Erro", message: "O número máximo de participantes deve ser maior que zero." });
+            setShowPopup(true);
+            setTimeout(() => setShowPopup(false), 3000); // Fecha o popup automaticamente após 3 segundos
             return false;
         }
         return true;
@@ -111,7 +123,6 @@ function CriarPublicacao() {
         e.preventDefault();
 
         if (!validateForm()) {
-            setShowPopup(true);
             return;
         }
 
@@ -120,6 +131,7 @@ function CriarPublicacao() {
             if (!token) {
                 setPopupData({ title: "Erro", message: "Você não está autenticado. Por favor, faça login." });
                 setShowPopup(true);
+                setTimeout(() => setShowPopup(false), 3000); // Fecha o popup automaticamente após 3 segundos
                 return;
             }
 
@@ -149,12 +161,10 @@ function CriarPublicacao() {
                 throw new Error(errorData.message || "Erro ao criar o evento.");
             }
 
-            setPopupData({ 
-                title: "Sucesso", 
-                message: "Evento criado com sucesso!" 
-            });
+            setPopupData({ title: "Sucesso", message: "Evento criado com sucesso!" });
             setShowPopup(true);
-            
+            setTimeout(() => setShowPopup(false), 3000); // Fecha o popup automaticamente após 3 segundos
+
             // Reset form
             setTitle("");
             setDescription("");
@@ -166,6 +176,7 @@ function CriarPublicacao() {
         } catch (error) {
             setPopupData({ title: "Erro", message: error.message });
             setShowPopup(true);
+            setTimeout(() => setShowPopup(false), 3000); // Fecha o popup automaticamente após 3 segundos
         }
     };
 

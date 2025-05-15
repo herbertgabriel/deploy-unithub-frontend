@@ -5,12 +5,20 @@ import Publicacao from "../../components/Publication/Publicacao";
 import { useAuth } from "../../context/AuthContext";
 import "./MeusEventos.css";
 import Cookies from "js-cookie";
+import FormsPopup from "../../components/Popup/FormsPopup/FormsPopup";
+import Button from "../../components/Button/Button";
 
 function MeusEventos() {
   const [myFeedItems, setMyFeedItems] = useState([]);
   const [loading, setLoading] = useState(false);
   const { isAuthenticated } = useAuth();
   const apiUrl = import.meta.env.VITE_API_BASE_URL;
+
+  const [showDeletePopup, setShowDeletePopup] = useState(false); // Controla o popup de exclusão
+  const [currentEvent, setCurrentEvent] = useState(null); // Evento atual para exclusão
+  const [confirmDelete, setConfirmDelete] = useState(false); // Estado do checkbox de confirmação
+  const [popupError, setPopupError] = useState(null); // Mensagem de erro no popup
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false); // Controla o popup de sucesso
 
   useEffect(() => {
     const fetchSelfPosts = async () => {
@@ -34,8 +42,6 @@ function MeusEventos() {
         }
 
         const data = await response.json();
-        console.log("Dados recebidos do servidor (MeusEventos):", data);
-
         setMyFeedItems(data || []);
       } catch (error) {
         console.error("Erro ao buscar o feed:", error.message);
@@ -49,14 +55,26 @@ function MeusEventos() {
     }
   }, [isAuthenticated, apiUrl]);
 
-  const handleDelete = async (eventId) => {
+  const handleOpenDeletePopup = (event) => {
+    setCurrentEvent(event);
+    setConfirmDelete(false);
+    setPopupError(null);
+    setShowDeletePopup(true);
+  };
+
+  const handleDeleteEvent = async () => {
+    if (!confirmDelete) {
+      setPopupError("Você deve confirmar que deseja excluir este evento.");
+      return;
+    }
+
     try {
       const token = Cookies.get("jwtToken");
       if (!token) {
         throw new Error("Token JWT não encontrado.");
       }
 
-      const response = await fetch(`${apiUrl}/events/${eventId}`, {
+      const response = await fetch(`${apiUrl}/events/${currentEvent.eventId}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -69,10 +87,23 @@ function MeusEventos() {
       }
 
       // Remove o evento deletado do estado
-      setMyFeedItems((prevItems) => prevItems.filter((item) => item.eventId !== eventId));
-      console.log(`Evento ${eventId} deletado com sucesso.`);
+      setMyFeedItems((prevItems) =>
+        prevItems.filter((item) => item.eventId !== currentEvent.eventId)
+      );
+      console.log(`Evento ${currentEvent.eventId} deletado com sucesso.`);
+
+      // Exibe o popup de sucesso
+      setShowSuccessPopup(true);
+
+      // Fecha o popup de exclusão
+      setShowDeletePopup(false);
+
+      // Fecha o popup de sucesso automaticamente após 3 segundos
+      setTimeout(() => {
+        setShowSuccessPopup(false);
+      }, 3000);
     } catch (error) {
-      console.error("Erro ao deletar o evento:", error.message);
+      setPopupError("Erro ao deletar o evento.");
     }
   };
 
@@ -110,13 +141,45 @@ function MeusEventos() {
                 }`}
                 imagens={item.images}
                 content={item.description}
-                onDelete={handleDelete} // Passa a função de exclusão
+                onDelete={() => handleOpenDeletePopup(item)} // Abre o popup de exclusão
               />
             ))
           )}
         </div>
       </main>
-      <Footer />
+
+      {/* Popup para Deletar Evento */}
+      {showDeletePopup && (
+        <FormsPopup
+          title={`Excluir Evento ${currentEvent.title}`}
+          onClose={() => setShowDeletePopup(false)}
+        >
+          {popupError && <p className="error-message">{popupError}</p>}
+          <p>Tem certeza que deseja excluir este evento?</p>
+          <div className="checkbox-container">
+            <input
+              type="checkbox"
+              id="confirm-delete-checkbox"
+              checked={confirmDelete}
+              onChange={(e) => setConfirmDelete(e.target.checked)}
+            />
+            <label htmlFor="confirm-delete-checkbox">
+              Confirmo que desejo excluir este evento.
+            </label>
+          </div>
+          <Button title="Confirmar" onClick={handleDeleteEvent} color="green" />
+        </FormsPopup>
+      )}
+
+      {/* Popup de Sucesso */}
+      {showSuccessPopup && (
+        <FormsPopup
+          title="Sucesso"
+          onClose={() => setShowSuccessPopup(false)}
+        >
+          <p>O evento foi excluído com sucesso!</p>
+        </FormsPopup>
+      )}
     </>
   );
 }

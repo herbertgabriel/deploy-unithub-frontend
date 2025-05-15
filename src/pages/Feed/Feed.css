@@ -1,5 +1,7 @@
 .feed-container {
     color: black;
+    overflow-x: hidden; 
+
 }
 
 .feed-container h1 {

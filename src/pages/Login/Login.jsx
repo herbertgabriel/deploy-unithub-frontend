@@ -96,6 +96,8 @@ function Login() {
         )}
         </div>
         </div>
+        <br className="footer-br" />
+        
       </main>
       <Footer />
     </>

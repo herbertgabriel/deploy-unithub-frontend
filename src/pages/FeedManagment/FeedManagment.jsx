@@ -42,6 +42,11 @@ function FeedManagment() {
         message: "Evento aceito com sucesso!",
         onClose: () => setPopupData(null),
       });
+
+      // Fecha o popup automaticamente após 3 segundos
+      setTimeout(() => {
+        setPopupData(null);
+      }, 3000);
     } catch (error) {
       setPopupData({
         id: "feed-managment-popup", // ID exclusivo
@@ -49,6 +54,11 @@ function FeedManagment() {
         message: "Erro ao aceitar o evento.",
         onClose: () => setPopupData(null),
       });
+
+      // Fecha o popup automaticamente após 3 segundos
+      setTimeout(() => {
+        setPopupData(null);
+      }, 3000);
     }
   };
 
@@ -66,6 +76,11 @@ function FeedManagment() {
         message: "Por favor, insira um motivo para recusar o evento.",
         onClose: () => setPopupData(null),
       });
+
+      // Fecha o popup automaticamente após 3 segundos
+      setTimeout(() => {
+        setPopupData(null);
+      }, 3000);
       return;
     }
 
@@ -76,6 +91,11 @@ function FeedManagment() {
         message: "Você deve confirmar que deseja recusar este evento.",
         onClose: () => setPopupData(null),
       });
+
+      // Fecha o popup automaticamente após 3 segundos
+      setTimeout(() => {
+        setPopupData(null);
+      }, 3000);
       return;
     }
 
@@ -99,6 +119,12 @@ function FeedManagment() {
         message: "Evento recusado com sucesso!",
         onClose: () => setPopupData(null),
       });
+
+      // Fecha o popup automaticamente após 3 segundos
+      setTimeout(() => {
+        setPopupData(null);
+      }, 3000);
+
       setShowRejectModal(false);
       setRejectReason("");
     } catch (error) {
@@ -108,6 +134,11 @@ function FeedManagment() {
         message: "Erro ao recusar o evento.",
         onClose: () => setPopupData(null),
       });
+
+      // Fecha o popup automaticamente após 3 segundos
+      setTimeout(() => {
+        setPopupData(null);
+      }, 3000);
     }
   };
 
@@ -125,7 +156,6 @@ function FeedManagment() {
           onReject={handleReject}
         />
       </main>
-      <Footer />
 
       {popupData && (
         <Popup

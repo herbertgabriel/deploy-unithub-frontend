@@ -5,6 +5,7 @@ import Footer from "../../components/Footer/Footer";
 import "./EventDetails.css";
 import Button from "../../components/Button/Button";
 import Popup from "../../components/Popup/Popup";
+import FormsPopup from "../../components/Popup/FormsPopup/FormsPopup";
 import SubscribersList from "../../components/SubscribersList/SubscribersList";
 import Cookies from "js-cookie";
 import { IoMdArrowBack } from "react-icons/io";
@@ -17,6 +18,9 @@ function EventDetails() {
     const [successMessage, setSuccessMessage] = useState(null);
     const [showPopup, setShowPopup] = useState(false); // Controla a exibição do Popup de erro
     const [showSubscribersPopup, setShowSubscribersPopup] = useState(false); // Controla a exibição do Popup de inscritos
+    const [showDeletePopup, setShowDeletePopup] = useState(false); // Controla o popup de exclusão
+    const [confirmDelete, setConfirmDelete] = useState(false); // Estado do checkbox de confirmação
+    const [popupError, setPopupError] = useState(null); // Mensagem de erro no popup de exclusão
     const apiUrl = import.meta.env.VITE_API_BASE_URL; // Obtém a URL base da API
 
     useEffect(() => {
@@ -31,6 +35,7 @@ function EventDetails() {
             } catch (err) {
                 setError(err.message);
                 setShowPopup(true); // Exibe o Popup em caso de erro
+                setTimeout(() => setShowPopup(false), 3000); // Fecha o popup automaticamente após 3 segundos
             } finally {
                 setLoading(false);
             }
@@ -62,20 +67,27 @@ function EventDetails() {
             }
 
             setSuccessMessage("Inscrição realizada com sucesso!");
+            setTimeout(() => setSuccessMessage(null), 3000); // Fecha o popup automaticamente após 3 segundos
         } catch (err) {
             setError(err.message);
             setShowPopup(true); // Exibe o Popup em caso de erro
+            setTimeout(() => setShowPopup(false), 3000); // Fecha o popup automaticamente após 3 segundos
         }
     };
 
-    const handleDelete = async (eventId) => {
+    const handleDeleteEvent = async () => {
+        if (!confirmDelete) {
+            setPopupError("Você deve confirmar que deseja excluir este evento.");
+            return;
+        }
+
         try {
             const token = Cookies.get("jwtToken");
             if (!token) {
                 throw new Error("Token JWT não encontrado.");
             }
 
-            const response = await fetch(`${apiUrl}/events/${eventId}`, {
+            const response = await fetch(`${apiUrl}/events/${id}`, {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json",
@@ -88,12 +100,15 @@ function EventDetails() {
             }
 
             setSuccessMessage("Evento excluído com sucesso!");
+            setShowDeletePopup(false); // Fecha o popup de exclusão
+
+            // Fecha o popup de sucesso automaticamente após 3 segundos
             setTimeout(() => {
-                window.history.back();
+                setSuccessMessage(null);
+                window.history.back(); // Volta para a página anterior
             }, 3000);
         } catch (error) {
-            setError(error.message);
-            setShowPopup(true); // Exibe o Popup em caso de erro
+            setPopupError("Erro ao deletar o evento.");
         }
     };
 
@@ -137,7 +152,7 @@ function EventDetails() {
                             {(Cookies.get("userRole") === "ORGANIZADOR" || Cookies.get("userRole") === "ADMIN") && (
                                 <>
                                     <Button title="Ver Inscritos" onClick={openSubscribersPopup} />
-                                    <Button title="Excluir publicação" onClick={() => handleDelete(id)} color="red" />
+                                    <Button title="Excluir publicação" onClick={() => setShowDeletePopup(true)} color="red" />
                                 </>
                             )}
                         </nav>
@@ -214,6 +229,27 @@ function EventDetails() {
                     message={successMessage}
                     onClose={() => setSuccessMessage(null)}
                 />
+            )}
+            {showDeletePopup && (
+               <FormsPopup
+                    title={`Excluir Evento ${eventDetails.title}`}
+                    onClose={() => setShowDeletePopup(false)}
+                >
+                    {popupError && <p className="error-message">{popupError}</p>}
+                    <p>Tem certeza que deseja excluir este evento?</p>
+                    <div className="checkbox-container">
+                        <input
+                            type="checkbox"
+                            id="confirm-delete-checkbox"
+                            checked={confirmDelete}
+                            onChange={(e) => setConfirmDelete(e.target.checked)}
+                        />
+                        <label htmlFor="confirm-delete-checkbox">
+                            Confirmo que desejo excluir este evento.
+                        </label>
+                    </div>
+                    <Button title="Confirmar" onClick={handleDeleteEvent} color="green" />
+                </FormsPopup>
             )}
             <Footer />
         </>
