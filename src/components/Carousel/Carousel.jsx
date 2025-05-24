@@ -16,6 +16,8 @@ function Carousel() {
     slidesToShow: 3,
     slidesToScroll: 1,
     autoplay: true,
+    draggable: true, // <-- garante que o drag está ativado
+
     autoplaySpeed: 5000,
     responsive: [
       {
